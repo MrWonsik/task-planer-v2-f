@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createUseStyles } from 'react-jss';
+import Planner from './components/Planner';
+
+const useStyles = createUseStyles({
+  '@global': {
+    body: {
+      backgroundColor: "lightgray"
+    },
+  }
+})
+
 
 function App() {
+  useStyles()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    // eslint-disable-next-line react/react-in-jsx-scope
+    <div>
+      <h1>Planner</h1>
+      <Planner />
     </div>
   );
 }
