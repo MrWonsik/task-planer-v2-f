@@ -1,5 +1,5 @@
 import { IconButton, Paper, Typography } from "@mui/material"
-import { Check, DeleteForever } from "@mui/icons-material"
+import { Check, DeleteForever, Undo } from "@mui/icons-material"
 import { createUseStyles } from "react-jss"
 import { PlannerTheme } from "../Theme"
 
@@ -21,7 +21,8 @@ const useStyle = createUseStyles((theme: PlannerTheme) => ({
         backgroundColor: theme.colorNeutral
     },
     taskCompleted: {
-        backgroundColor: theme.colorLight2
+        backgroundColor: theme.colorLight2,
+        textDecoration: "line-through"
     },
     buttons: {
         display: "none"
@@ -31,7 +32,8 @@ const useStyle = createUseStyles((theme: PlannerTheme) => ({
 export interface Task {
     id: string,
     title: string,
-    complete: boolean
+    complete: boolean,
+    creationDate: number
 }
 
 type TaskElementProps = {
@@ -47,9 +49,15 @@ function TaskElement({ task, completeTask, deleteTask }: TaskElementProps): JSX.
             <div className={`${classes.taskContainer} ${task.complete ? classes.taskCompleted : ""}`}>
                 <Typography variant="body1">{task.title}</Typography>
                 <div className={classes.buttons}>
-                    <IconButton aria-label="complete" color="primary" onClick={() => completeTask(task.id)}>
-                        <Check />
-                    </IconButton>
+                    {task.complete ?
+                        <IconButton aria-label="undo" color="secondary" onClick={() => console.log("not implemented")}>
+                            <Undo />
+                        </IconButton>
+                        :
+                        <IconButton aria-label="complete" color="primary" onClick={() => completeTask(task.id)}>
+                            <Check />
+                        </IconButton>
+                    }
                     <IconButton aria-label="Delete" color="secondary" onClick={() => deleteTask(task.id)}>
                         <DeleteForever />
                     </IconButton>

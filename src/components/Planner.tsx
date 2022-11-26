@@ -2,7 +2,7 @@ import { Box, Container, IconButton, TextField } from "@mui/material"
 import { createUseStyles } from "react-jss";
 import TasksList from "./TasksList"
 import { Task } from "./TaskElement";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { Add } from "@mui/icons-material";
 import { randomUUID } from "../utils/uuidGenerator";
 import TopBar from "./TopBar";
@@ -28,17 +28,21 @@ const mockedTasks: Task[] = [
   {
       id: randomUUID(),
       title: "taskName1",
-      complete: false
+      complete: false,
+      creationDate: Date.now() - 1000
   },
   {
       id: randomUUID(),
       title: "taskName2",
-      complete: false
+      complete: false,
+      creationDate: Date.now() - 1000
+
   },
   {
       id: randomUUID(),
       title: "taskName3",
-      complete: false
+      complete: false,
+      creationDate: Date.now() - 1000
   },
 ]
 
@@ -77,6 +81,7 @@ function reducer(state: PlannerState, action: Action) {
 
 function Planner(): JSX.Element {
   const classes = useStyles();
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const [state, dispatch] =  useReducer(reducer, initialState);
 
   const completeTask = (id: string): void => dispatch({ type: "complete", data: { id }});
@@ -86,9 +91,22 @@ function Planner(): JSX.Element {
     <Container maxWidth="sm" className={classes.plannerContainer}>
       <TopBar />
       <Box className={classes.plannerContainer} >
-        <TextField id="standard-basic" fullWidth label="Add new todo" variant="standard" />
-        <IconButton aria-label="add" onClick={() => dispatch({ type: "add", data: { newTask: {
-            id: randomUUID(), title: "smth", complete: false }}})}>
+        <TextField
+          id="standard-basic"
+          fullWidth
+          label="Add new todo"
+          variant="standard"
+          onChange={(e) => setNewTaskTitle(e.target.value)}
+          value={newTaskTitle}/>
+        <IconButton
+          aria-label="add"
+          onClick={() => {
+            dispatch({ type: "add", data:
+              { newTask: {id: randomUUID(), title: newTaskTitle, complete: false, creationDate: Date.now() }}}
+            );
+            setNewTaskTitle("");
+          }}
+        >
           <Add />
         </IconButton>
         <TasksList tasks={state.tasks} completeTask={completeTask} deleteTask={deleteTask}/>
