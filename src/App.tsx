@@ -1,20 +1,16 @@
-import { createUseStyles } from 'react-jss';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { ThemeProvider as JssThemeProvider } from 'react-jss';
 import Planner from './components/Planner';
-
-const useStyles = createUseStyles({
-  '@global': {
-    body: {
-      backgroundColor: "lightgray"
-    },
-  }
-})
-
+import { defaultJssTheme, muiTheme } from './Theme';
 
 function App() {
-  useStyles()
 
   return (
-    <Planner />
+    <ThemeProvider theme={muiTheme}>
+      <JssThemeProvider theme={defaultJssTheme}>
+        <Planner />
+      </JssThemeProvider>
+    </ThemeProvider>
   );
 }
 

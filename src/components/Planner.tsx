@@ -5,8 +5,16 @@ import { Task } from "./TaskElement";
 import { useReducer } from "react";
 import { Add } from "@mui/icons-material";
 import { randomUUID } from "../utils/uuidGenerator";
+import TopBar from "./TopBar";
+import { PlannerTheme } from "../Theme";
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: PlannerTheme) => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.colorLight1,
+      color: `${theme.colorDark1} !important`
+    },
+  },
   plannerContainer: {
     marginTop: "50px",
     display: "flex",
@@ -14,7 +22,7 @@ const useStyles = createUseStyles({
     justifyContent: "center",
     flexDirection: "column"
   }
-})
+}))
 
 const mockedTasks: Task[] = [
   {
@@ -76,6 +84,7 @@ function Planner(): JSX.Element {
 
   return (
     <Container maxWidth="sm" className={classes.plannerContainer}>
+      <TopBar />
       <Box className={classes.plannerContainer} >
         <TextField id="standard-basic" fullWidth label="Add new todo" variant="standard" />
         <IconButton aria-label="add" onClick={() => dispatch({ type: "add", data: { newTask: {
