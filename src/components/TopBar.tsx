@@ -1,13 +1,18 @@
-import { Paper, Typography } from "@mui/material";
+import { Add, Check } from "@mui/icons-material";
+import { Fab, Paper, Typography } from "@mui/material";
 import { createUseStyles } from "react-jss";
-import { PlannerTheme } from "../Theme";
+import { JssTheme } from "../app/Theme";
 
-const useStyles = createUseStyles((theme: PlannerTheme) => ({
+const useStyles = createUseStyles((theme: JssTheme) => ({
     dateContainer: {
-        minWidth: "400px",
         padding: "20px",
-        backgroundColor: theme.colorNeutral,
-        color: theme.colorDark1,
+        backgroundColor: theme.colors.colorNeutral,
+        color: theme.colors.colorDark1,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+        marginBottom: "20px"
     },
     dateContainerRow: {
         display: "flex",
@@ -17,7 +22,7 @@ const useStyles = createUseStyles((theme: PlannerTheme) => ({
     },
     dayOfWeek: {
         fontWeight: "bold",
-        color: theme.colorDark1,
+        color: theme.colors.colorDark1,
         fontSize: "40px",
         letterSpacing: "3px"
     },
@@ -35,7 +40,8 @@ const useStyles = createUseStyles((theme: PlannerTheme) => ({
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-function TopBar(): JSX.Element {
+function TopBar({ inputVisible, addButtonClickedHandler }:
+    { inputVisible: boolean, addButtonClickedHandler: () => void }): JSX.Element {
     const classes = useStyles();
     const now = new Date();
     const currentDayOfWeek = weekday[now.getDay()];
@@ -43,13 +49,20 @@ function TopBar(): JSX.Element {
     const currentMonth = months[now.getMonth()];
 
     return (
-        <Paper elevation={1}  className={classes.dateContainer}>
-            <Typography className={classes.dayOfWeek}>
-                {currentDayOfWeek},
-            </Typography>
-            <div className={classes.dateContainerRow}>
-                <Typography className={classes.day}>{currentDay}</Typography>
-                <Typography className={classes.month}>{currentMonth}</Typography>
+        <Paper elevation={1} className={classes.dateContainer}>
+            <div>
+                <Typography className={classes.dayOfWeek}>
+                    {currentDayOfWeek},
+                </Typography>
+                <div className={classes.dateContainerRow}>
+                    <Typography className={classes.day}>{currentDay}</Typography>
+                    <Typography className={classes.month}>{currentMonth}</Typography>
+                </div>
+            </div>
+            <div>
+                <Fab color="primary" aria-label="add" onClick={() => addButtonClickedHandler()}>
+                    {inputVisible ? <Check /> : <Add /> }
+                </Fab>
             </div>
         </Paper>
     )

@@ -1,12 +1,11 @@
 import { IconButton, Paper, Typography } from "@mui/material"
 import { Check, DeleteForever, Undo } from "@mui/icons-material"
 import { createUseStyles } from "react-jss"
-import { PlannerTheme } from "../Theme"
+import { JssTheme } from "../app/Theme"
 
-const useStyle = createUseStyles((theme: PlannerTheme) => ({
+const useStyle = createUseStyles((theme: JssTheme) => ({
     taskContainer: {
         margin: "0px 20px",
-        minWidth: theme.minWidth,
         minHeight: "40px",
         display: "flex",
         justifyContent: "space-between",
@@ -18,10 +17,10 @@ const useStyle = createUseStyles((theme: PlannerTheme) => ({
         }
     },
     task: {
-        backgroundColor: theme.colorNeutral
+        backgroundColor: theme.colors.colorNeutral
     },
     taskCompleted: {
-        backgroundColor: theme.colorLight2,
+        backgroundColor: theme.colors.colorLight1,
         textDecoration: "line-through"
     },
     buttons: {
@@ -39,10 +38,11 @@ export interface Task {
 type TaskElementProps = {
     task: Task,
     completeTask: (id: string) => void,
+    undoCompleteTask: (id: string) => void,
     deleteTask: (id: string) => void
 }
 
-function TaskElement({ task, completeTask, deleteTask }: TaskElementProps): JSX.Element {
+function TaskElement({ task, completeTask, deleteTask, undoCompleteTask }: TaskElementProps): JSX.Element {
     const classes = useStyle();
     return (
         <Paper elevation={1} className={task.complete ? classes.taskCompleted : classes.task}>
@@ -50,7 +50,7 @@ function TaskElement({ task, completeTask, deleteTask }: TaskElementProps): JSX.
                 <Typography variant="body1">{task.title}</Typography>
                 <div className={classes.buttons}>
                     {task.complete ?
-                        <IconButton aria-label="undo" color="secondary" onClick={() => console.log("not implemented")}>
+                        <IconButton aria-label="undo" color="secondary" onClick={() => undoCompleteTask(task.id)}>
                             <Undo />
                         </IconButton>
                         :

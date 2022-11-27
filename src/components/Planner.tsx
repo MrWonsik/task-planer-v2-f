@@ -1,116 +1,78 @@
-import { Box, Container, IconButton, TextField } from "@mui/material"
+import { Box, Container, TextField } from "@mui/material"
 import { createUseStyles } from "react-jss";
 import TasksList from "./TasksList"
-import { Task } from "./TaskElement";
 import { useReducer, useState } from "react";
-import { Add } from "@mui/icons-material";
 import { randomUUID } from "../utils/uuidGenerator";
 import TopBar from "./TopBar";
-import { PlannerTheme } from "../Theme";
+import { JssTheme } from "../app/Theme";
+import { initialState, reducer } from "../app/Reducer";
+import working from '../pusheens/working.gif';
+import complete from '../pusheens/complete.gif';
 
-const useStyles = createUseStyles((theme: PlannerTheme) => ({
+const useStyles = createUseStyles((theme: JssTheme) => ({
   '@global': {
     body: {
-      backgroundColor: theme.colorLight1,
-      color: `${theme.colorDark1} !important`
+      backgroundColor: theme.colors.colorLight2,
+      color: `${theme.colors.colorDark1} !important`
     },
   },
-  plannerContainer: {
+  container: {
     marginTop: "50px",
+    maxWidth: theme.maxWidth,
+    textAlign: "center"
+  },
+  plannerContainer: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
     flexDirection: "column"
+  },
+  img: {
+    maxWidth: "150px"
   }
 }))
-
-const mockedTasks: Task[] = [
-  {
-      id: randomUUID(),
-      title: "taskName1",
-      complete: false,
-      creationDate: Date.now() - 1000
-  },
-  {
-      id: randomUUID(),
-      title: "taskName2",
-      complete: false,
-      creationDate: Date.now() - 1000
-
-  },
-  {
-      id: randomUUID(),
-      title: "taskName3",
-      complete: false,
-      creationDate: Date.now() - 1000
-  },
-]
-
-interface PlannerState {
-  tasks: Task[]
-}
-
-type Action =
- | { type: 'add', data: { newTask: Task } }
- | { type: 'remove', data: { id: string } }
- | { type: 'complete', data: { id: string } };
-
-const initialState: PlannerState = { tasks: mockedTasks }
-
-function reducer(state: PlannerState, action: Action) {
-  switch(action.type) {
-    case "add":
-      return {
-        ...state,
-        tasks: [...state.tasks, action.data.newTask]
-      }
-    case "remove":
-      console.log("remove");
-      return {
-        ...state,
-        tasks: state.tasks.filter((task: Task) => task.id !== action.data.id)
-      }
-    case "complete":
-      console.log("complete");
-      return {
-        ...state,
-        tasks: state.tasks.map((task: Task) => task.id == action.data.id ? { ...task, complete: true } : task)
-      }
-  }
-}
 
 function Planner(): JSX.Element {
   const classes = useStyles();
   const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [state, dispatch] =  useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [inputVisible, setInputVisible] = useState(false);
 
-  const completeTask = (id: string): void => dispatch({ type: "complete", data: { id }});
-  const deleteTask = (id: string): void => dispatch({ type: "remove", data: { id }});
+  const completeTask = (id: string): void => dispatch({ type: "complete", data: { id } });
+  const undoCompleteTask = (id: string): void => dispatch({ type: "undo-complete", data: { id } });
+  const deleteTask = (id: string): void => dispatch({ type: "remove", data: { id } });
+  const addTask = (taskTitle: string): void => {
+    dispatch({
+      type: "add", data:
+        { newTask: { id: randomUUID(), title: taskTitle, complete: false, creationDate: Date.now() } }
+    });
+    setNewTaskTitle("");
+    setInputVisible(false);
+  }
 
   return (
-    <Container maxWidth="sm" className={classes.plannerContainer}>
-      <TopBar />
+    <Container className={classes.container}>
+      <TopBar
+        inputVisible={inputVisible}
+        addButtonClickedHandler={() => inputVisible ? addTask(newTaskTitle) : setInputVisible(true)}
+      />
       <Box className={classes.plannerContainer} >
-        <TextField
+        {inputVisible && <TextField
           id="standard-basic"
           fullWidth
-          label="Add new todo"
+          label="Write your task, and push enter..."
           variant="standard"
           onChange={(e) => setNewTaskTitle(e.target.value)}
-          value={newTaskTitle}/>
-        <IconButton
-          aria-label="add"
-          onClick={() => {
-            dispatch({ type: "add", data:
-              { newTask: {id: randomUUID(), title: newTaskTitle, complete: false, creationDate: Date.now() }}}
-            );
-            setNewTaskTitle("");
-          }}
-        >
-          <Add />
-        </IconButton>
-        <TasksList tasks={state.tasks} completeTask={completeTask} deleteTask={deleteTask}/>
+          value={newTaskTitle}
+          onKeyDown={(e) => { if (e.key === "Enter") addTask(newTaskTitle); }} />
+        }
+        <hr />
+        <TasksList tasks={state.tasks} completeTask={completeTask} undoCompleteTask={undoCompleteTask} deleteTask={deleteTask} />
       </Box>
+      {state.tasks.length > 0 && (
+        state.tasks.filter(task => !task.complete).length > 0
+          ? <img src={working} className={classes.img} />
+          : <img src={complete} className={classes.img} />
+      )}
     </Container >
   )
 }
