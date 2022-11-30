@@ -45,7 +45,6 @@ function Planner(): JSX.Element {
         { newTask: { id: randomUUID(), title: taskTitle, complete: false, creationDate: Date.now() } }
     });
     setNewTaskTitle("");
-    setInputVisible(false);
   }
 
   const reorderTasks = (startIndex: number, endIndex: number): void => dispatch({ type: "reorder-tasks", data: { startIndex, endIndex }})
@@ -53,8 +52,7 @@ function Planner(): JSX.Element {
   return (
     <Container className={classes.container}>
       <TopBar
-        inputVisible={inputVisible}
-        addButtonClickedHandler={() => inputVisible ? addTask(newTaskTitle) : setInputVisible(true)}
+        addButtonClickedHandler={() => setInputVisible(true)}
         taskQuantity={state.tasks.filter(task => !task.complete).length}
       />
       <Box className={classes.plannerContainer} >
@@ -65,7 +63,9 @@ function Planner(): JSX.Element {
           variant="standard"
           onChange={(e) => setNewTaskTitle(e.target.value)}
           value={newTaskTitle}
-          onKeyDown={(e) => { if (e.key === "Enter") addTask(newTaskTitle); }} />
+          onKeyDown={(e) => { if (e.key === "Enter") addTask(newTaskTitle); }}
+          autoFocus
+          onBlur={() => setTimeout(() => setInputVisible(false), 100) } />
         }
         <TasksList tasks={state.tasks} reorderTasks={reorderTasks} completeTask={completeTask} undoCompleteTask={undoCompleteTask} deleteTask={deleteTask} />
       </Box>

@@ -1,4 +1,4 @@
-import { Add, Check } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { Badge, Fab, Paper, Typography } from "@mui/material";
 import { createUseStyles } from "react-jss";
 import { JssTheme } from "../app/Theme";
@@ -42,8 +42,8 @@ const useStyles = createUseStyles((theme: JssTheme) => ({
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-function TopBar({ inputVisible, addButtonClickedHandler, taskQuantity }:
-    { inputVisible: boolean, addButtonClickedHandler: () => void, taskQuantity: number }): JSX.Element {
+function TopBar({ addButtonClickedHandler, taskQuantity }:
+    { addButtonClickedHandler: () => void, taskQuantity: number }): JSX.Element {
     const classes = useStyles();
     const now = new Date();
     const currentDayOfWeek = weekday[now.getDay()];
@@ -64,7 +64,7 @@ function TopBar({ inputVisible, addButtonClickedHandler, taskQuantity }:
             <div>
                 <Badge max={10} badgeContent={taskQuantity} color="secondary" overlap="circular" classes={{ badge: classes.badge }}>
                     <Fab color="primary" aria-label="add" onClick={() => addButtonClickedHandler()}>
-                        {inputVisible ? <Check /> : <Add />}
+                        <Add />
                     </Fab>
                 </Badge>
             </div>

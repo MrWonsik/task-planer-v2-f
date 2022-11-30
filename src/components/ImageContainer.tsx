@@ -6,7 +6,8 @@ import complete from '../pusheens/complete.gif';
 import search from '../pusheens/search.webp';
 
 const useStyle = createUseStyles({
-    noTaskContainer: {
+    taskContainer: {
+        marginTop: "15px",
         textAlign: "center"
     },
     img: {
@@ -16,21 +17,27 @@ const useStyle = createUseStyles({
 
 function ImageContainer({ tasks }: { tasks: Task[] }): JSX.Element {
     const classes = useStyle();
+    const noTasks = tasks.length === 0;
+    const anyIncompleteTasks = tasks.filter(task => !task.complete).length > 0;
+    const allTasksComplete = !anyIncompleteTasks && tasks.filter(task => task.complete).length > 0;
     switch (true) {
-        case tasks.length === 0: {
-            return <div className={classes.noTaskContainer}>
+        case noTasks: {
+            return <div className={classes.taskContainer}>
                 <img src={search} className={classes.img} />
                 <Typography>No tasks!</Typography>
             </div>
         }
-        case tasks.filter(task => !task.complete).length > 0: {
+        case anyIncompleteTasks: {
             return <img src={working} className={classes.img} />
         }
-        default: {
-            return <div className={classes.noTaskContainer}>
+        case allTasksComplete: {
+            return <div className={classes.taskContainer}>
                 <img src={complete} className={classes.img} />
                 <Typography>All tasks complete!</Typography>
             </div>
+        }
+        default: {
+            return <></>
         }
     }
 }

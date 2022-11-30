@@ -1,26 +1,4 @@
 import { Task } from "../components/TaskElement";
-import { randomUUID } from "../utils/uuidGenerator";
-
-const mockedTasks: Task[] = [
-  {
-    id: randomUUID(),
-    title: "taskName1",
-    complete: false,
-    creationDate: Date.now() - 1000,
-  },
-  {
-    id: randomUUID(),
-    title: "taskName2",
-    complete: false,
-    creationDate: Date.now() - 1000,
-  },
-  {
-    id: randomUUID(),
-    title: "taskName3",
-    complete: false,
-    creationDate: Date.now() - 1000,
-  },
-];
 
 interface PlannerState {
   tasks: Task[];
@@ -33,7 +11,7 @@ type Action =
   | { type: "undo-complete"; data: { id: string } }
   | { type: "reorder-tasks"; data: { startIndex: number, endIndex: number } };
 
-export const initialState: PlannerState = { tasks: mockedTasks };
+export const initialState: PlannerState = { tasks: [] };
 
 export function reducer(state: PlannerState, action: Action): PlannerState {
   switch (action.type) {

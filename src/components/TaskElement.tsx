@@ -21,7 +21,8 @@ const useStyle = createUseStyles((theme: JssTheme) => ({
     },
     taskCompleted: {
         backgroundColor: theme.colors.backgroundColor2,
-        textDecoration: "line-through"
+        textDecoration: "line-through",
+        fontStyle: "italic"
     },
     buttons: {
         display: "none"
