@@ -24,36 +24,24 @@ const themes: { icon: JSX.Element, name: string, colors: PlannerColors }[] = [
     },
     {
         icon: <BrushIcon />,
-        name: "dark",
-        colors: {
-            colorDark1: "#191D32",
-            colorDark2: "#282F44",
-            colorNeutral: "#453A49",
-            colorLight1: "#6D3B47",
-            colorLight2: "#BA2C73"
-        }
-    },
-    {
-        icon: <BrushIcon />,
         name: "neutral",
         colors: {
-            colorDark1: "#0A014F",
-            colorDark2: "#CD9FCC",
-            colorNeutral: "#E4C2C6",
-            colorLight1: "#F6CACA",
-            colorLight2: "#FAE8EB"
+            fontColor: "#495159",
+            primaryColor: "#FAC9B8",
+            backgroundColor: "#A1E8CC",
+            backgroundColor2: "#C5DECD",
+            backgroundColor3: "#E5D4C0"
         }
     },
-
     {
         icon: <BrushIcon />,
         name: "neutral #2",
         colors: {
-            colorDark1: "#495159",
-            colorDark2: "#FAC9B8",
-            colorNeutral: "#C5DECD",
-            colorLight1: "#A1E8CC",
-            colorLight2: "#E5D4C0"
+            fontColor: "#8D5A97",
+            primaryColor: "#B8EBD0",
+            backgroundColor: "#A4A5AE",
+            backgroundColor2: "#907F9F",
+            backgroundColor3: "#B0C7BD"
         }
     },
 ];
@@ -74,11 +62,11 @@ function ThemeSwitcher({ setTheme }: ThemeSwitcherProps): JSX.Element {
                         onClick={() => setTheme({ mui: muiTheme(action.colors), jss: jssTheme(action.colors) })}
                         FabProps={{
                             sx: {
-                                bgcolor: action.colors.colorLight2,
-                                color: action.colors.colorDark1,
+                                bgcolor: action.colors.backgroundColor3,
+                                color: action.colors.fontColor,
                               "&:hover": {
-                                    bgcolor: action.colors.colorLight2,
-                                    color: action.colors.colorNeutral
+                                    bgcolor: action.colors.backgroundColor3,
+                                    color: action.colors.backgroundColor
                                 }
                             }
                         }}

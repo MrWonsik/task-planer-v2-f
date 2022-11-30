@@ -17,10 +17,10 @@ const useStyle = createUseStyles((theme: JssTheme) => ({
         }
     },
     task: {
-        backgroundColor: theme.colors.colorNeutral
+        backgroundColor: theme.colors.backgroundColor
     },
     taskCompleted: {
-        backgroundColor: theme.colors.colorLight1,
+        backgroundColor: theme.colors.backgroundColor2,
         textDecoration: "line-through"
     },
     buttons: {

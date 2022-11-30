@@ -6,14 +6,13 @@ import { randomUUID } from "../utils/uuidGenerator";
 import TopBar from "./TopBar";
 import { JssTheme } from "../app/Theme";
 import { initialState, reducer } from "../app/Reducer";
-import working from '../pusheens/working.gif';
-import complete from '../pusheens/complete.gif';
+import ImageContainer from "./ImageContainer";
 
 const useStyles = createUseStyles((theme: JssTheme) => ({
   '@global': {
     body: {
-      backgroundColor: theme.colors.colorLight2,
-      color: `${theme.colors.colorDark1} !important`
+      backgroundColor: theme.colors.backgroundColor3,
+      color: `${theme.colors.fontColor} !important`
     },
   },
   container: {
@@ -49,11 +48,14 @@ function Planner(): JSX.Element {
     setInputVisible(false);
   }
 
+  const reorderTasks = (startIndex: number, endIndex: number): void => dispatch({ type: "reorder-tasks", data: { startIndex, endIndex }})
+
   return (
     <Container className={classes.container}>
       <TopBar
         inputVisible={inputVisible}
         addButtonClickedHandler={() => inputVisible ? addTask(newTaskTitle) : setInputVisible(true)}
+        taskQuantity={state.tasks.filter(task => !task.complete).length}
       />
       <Box className={classes.plannerContainer} >
         {inputVisible && <TextField
@@ -65,14 +67,9 @@ function Planner(): JSX.Element {
           value={newTaskTitle}
           onKeyDown={(e) => { if (e.key === "Enter") addTask(newTaskTitle); }} />
         }
-        <hr />
-        <TasksList tasks={state.tasks} completeTask={completeTask} undoCompleteTask={undoCompleteTask} deleteTask={deleteTask} />
+        <TasksList tasks={state.tasks} reorderTasks={reorderTasks} completeTask={completeTask} undoCompleteTask={undoCompleteTask} deleteTask={deleteTask} />
       </Box>
-      {state.tasks.length > 0 && (
-        state.tasks.filter(task => !task.complete).length > 0
-          ? <img src={working} className={classes.img} />
-          : <img src={complete} className={classes.img} />
-      )}
+      <ImageContainer tasks={state.tasks} />
     </Container >
   )
 }

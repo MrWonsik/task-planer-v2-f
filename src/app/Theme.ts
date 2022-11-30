@@ -2,19 +2,19 @@ import createTheme from "@mui/material/styles/createTheme";
 import { Theme as MuiTheme } from "@mui/system";
 
 export interface PlannerColors {
-    colorDark1: string,
-    colorDark2: string,
-    colorNeutral: string,
-    colorLight1: string,
-    colorLight2: string
+    fontColor: string,
+    primaryColor: string,
+    backgroundColor: string,
+    backgroundColor2: string,
+    backgroundColor3: string
 }
 
 export const defaultColors: PlannerColors = {
-    colorDark1: "#12263A",
-    colorDark2: "#06BCC1",
-    colorNeutral: "#C5D8D1",
-    colorLight1: "#F4D1AE",
-    colorLight2: "#F4EDEA"
+    fontColor: "#12263A",
+    primaryColor: "#06BCC1",
+    backgroundColor: "#C5D8D1",
+    backgroundColor2: "#F4D1AE",
+    backgroundColor3: "#F4EDEA"
 }
 
 export interface JssTheme {
@@ -31,11 +31,11 @@ export const jssTheme = (colors: PlannerColors = defaultColors): JssTheme => ({
 export const muiTheme = (colors: PlannerColors = defaultColors): MuiTheme => createTheme({
     palette: {
         primary: {
-            main: colors.colorDark2,
-            contrastText: colors.colorDark1
+            main: colors.primaryColor,
+            contrastText: colors.fontColor
         },
         secondary: {
-            main: colors.colorDark1
+            main: colors.fontColor
         }
     },
 });
